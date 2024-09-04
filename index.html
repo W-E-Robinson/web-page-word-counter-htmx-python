@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Web Page Word Counter</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
+
+    <h1>Web Page Word Counter</h1>
+    <h4>Paste a URL into the form below and click Count to find out how many words are in the page!</h4>
+
+    <form id="form">
+        <input type="text" name="url" value="">
+        <button class="btn" hx-get="http://localhost:8080/reset" hx-trigger="click" hx-target="#form">
+            Reset
+        </button>
+        <button class="btn" hx-get="http://localhost:8080/count" hx-trigger="click" hx-target="#counts">
+            Count
+        </button>
+    </form>
+    <div id="counts"></div>
+</body>
+
+</html>
