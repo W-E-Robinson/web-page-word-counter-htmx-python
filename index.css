@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h4,
+form {
+    display: flex;
+    justify-content: center;
+    font-weight: normal;
+}
+
+button {
+    margin-left: 0.5rem;
+    border-radius: 0.3rem;
+}
+
+input {
+    width: 18rem;
+    height: 2rem;
+}
