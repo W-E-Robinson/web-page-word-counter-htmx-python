@@ -205,5 +205,5 @@ if __name__ == "__main__":
     logging.info("Initiating MongoDb client")
     # NOTE: environment variable this
     mongo_client = MongoClient(
-        "mongodb://web-page-word-counter-mongodb:27017/")
+        "mongodb://localhost:27017/")  # NOTE: this needs enving for tests, compose vs dev
     run(mongo_client)
