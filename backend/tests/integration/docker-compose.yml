@@ -1,0 +1,34 @@
+version: "3.2"
+
+services:
+  web-page-word-counter-python:
+    image: web-page-word-counter-python
+    container_name: web-page-word-counter-python
+    ports:
+      - 8080:8080
+
+  web-page-word-counter-mongodb:
+    image: mongo:latest
+    container_name: web-page-word-counter-mongodb
+    ports:
+      - 27017:27017
+
+  sample-1-html-server:
+    image: python:3.9-slim
+    container_name: sample-1-html-server
+    volumes:
+      - ../fixtures/sample1.html:/app/index.html
+    ports:
+      - 8081:8080
+    command: python3 -m http.server 8080 --bind 0.0.0.0
+    working_dir: /app
+
+  sample-2-html-server:
+    image: python:3.9-slim
+    container_name: sample-2-html-server
+    volumes:
+      - ../fixtures/sample2.html:/app/index.html
+    ports:
+      - 8082:8080
+    command: python3 -m http.server 8080 --bind 0.0.0.0
+    working_dir: /app

@@ -1,0 +1,15 @@
+version: "3.2"
+# NOTE: move this in monorepoing? = top level = for all
+
+services:
+  web-page-word-counter-python:
+    image: web-page-word-counter-python
+    container_name: web-page-word-counter-python
+    ports:
+      - 8080:8080
+
+  web-page-word-counter-mongodb:
+    image: mongo:latest
+    container_name: web-page-word-counter-mongodb
+    ports:
+      - 27017:27017

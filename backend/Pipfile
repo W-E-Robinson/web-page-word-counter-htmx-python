@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+jinja2 = "*"
+pymongo = "*"
+
+[dev-packages]
+pytest = "*"
+requests = "*"
+black = "*"
+isort = "*"
+flake8 = "*"
+
+[scripts]
+dev = "python3 src/main.py"
+format = "isort . && black . && flake8 ."
+test-unit = "pytest -v --maxfail=1 --disable-warnings tests/unit"
+test-integration = "pytest -v --maxfail=1 --disable-warnings tests/integration"
+
+
+[requires]
+python_version = "3.12"
