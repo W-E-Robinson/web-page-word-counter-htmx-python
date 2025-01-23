@@ -77,7 +77,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     self.complete_response(200, content)
                     return
                 except Exception as e:
-                    error = f"Error during rendering of reset_form_template: {
+                    error = f"Exception during rendering of reset_form_template: {
                         e}"
                     logging.error(error)
                     self.complete_response(500, error.encode("utf-8"))
@@ -97,19 +97,20 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                 # NOTE: consider HTTP methods of pagination and display.
                 # NOTE: for pagi + disp, check url already in word counts = another common mongo function called here before each further interaction? = or do as part and save a mondgo request?
                 if isPaginationRequest:
-                    pagination_value = url[pagination_index + len("&page="): None]
+                    pagination_value = url[pagination_index +
+                                           len("&page="): None]
                     url = url[None: pagination_index]
                     try:
                         update_page(url, int(pagination_value),
                                     self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during updating of page: {
+                        error = f"UrlError during updating of page: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during updating of page: {
+                        error = f"Exception during updating of page: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -121,13 +122,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                         update_display(url, False if display_value ==
                                        "false" else True, self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during updating of display: {
+                        error = f"UrlError during updating of display: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during updating of display: {
+                        error = f"Exception during updating of display: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -136,13 +137,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     try:
                         add_new_count(url, self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during addition of new URL count: {
+                        error = f"UrlError during addition of new URL count: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during addition of new URL count: {
+                        error = f"Exception during addition of new URL count: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -155,13 +156,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     self.complete_response(200, content)
                     return
                 except UrlError as e:
-                    error = f"Error during getting of all counts: {
+                    error = f"UrlError during getting of all counts: {
                         e.message}"
                     logging.error(error)
                     self.complete_response(e.code, error.encode("utf-8"))
                     return
                 except Exception as e:
-                    error = f"Error during getting of all counts: {
+                    error = f"Exception during getting of all counts: {
                         e}"
                     logging.error(error)
                     self.complete_response(500, error.encode("utf-8"))

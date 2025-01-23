@@ -69,7 +69,7 @@ def test_it_responds_with_error_html_when_reset_templating_exception_occurs():
     with patch("main.reset_html", side_effect=Exception("reset template error")):
         handler.do_GET()
 
-        error = "Error during rendering of reset_form_template: reset template error".encode(
+        error = "Exception during rendering of reset_form_template: reset template error".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -109,7 +109,7 @@ def test_it_responds_with_error_html_when_add_new_count_url_error_occurs():
     with patch("main.add_new_count", side_effect=UrlError("URL error", 400)):
         handler.do_GET()
 
-        error = "Error during addition of new URL count: URL error".encode(
+        error = "UrlError during addition of new URL count: URL error".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(400)
@@ -130,7 +130,7 @@ def test_it_responds_with_error_html_when_add_new_count_exception_occurs():
     with patch("main.add_new_count", side_effect=Exception("exception")):
         handler.do_GET()
 
-        error = "Error during addition of new URL count: exception".encode(
+        error = "Exception during addition of new URL count: exception".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -151,7 +151,7 @@ def test_it_responds_with_error_html_when_update_page_url_error_occurs():
     with patch("main.update_page", side_effect=UrlError("URL error", 500)):
         handler.do_GET()
 
-        error = "Error during updating of page: URL error".encode(
+        error = "UrlError during updating of page: URL error".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -172,7 +172,7 @@ def test_it_responds_with_error_html_when_update_page_exception_occurs():
     with patch("main.update_page", side_effect=Exception("exception")):
         handler.do_GET()
 
-        error = "Error during updating of page: exception".encode(
+        error = "Exception during updating of page: exception".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -193,7 +193,7 @@ def test_it_responds_with_error_html_when_update_display_url_error_occurs():
     with patch("main.update_display", side_effect=UrlError("URL error", 500)):
         handler.do_GET()
 
-        error = "Error during updating of display: URL error".encode(
+        error = "UrlError during updating of display: URL error".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -214,7 +214,7 @@ def test_it_responds_with_error_html_when_update_display_exception_occurs():
     with patch("main.update_display", side_effect=Exception("exception")):
         handler.do_GET()
 
-        error = "Error during updating of display: exception".encode(
+        error = "Exception during updating of display: exception".encode(
             "utf-8")
 
         handler.send_response.assert_called_once_with(500)
@@ -236,7 +236,7 @@ def test_it_responds_with_error_html_when_get_counts_url_error_occurs():
         with patch("main.get_counts", side_effect=UrlError("URL error", 500)):
             handler.do_GET()
 
-            error = "Error during getting of all counts: URL error".encode(
+            error = "UrlError during getting of all counts: URL error".encode(
                 "utf-8")
 
             handler.send_response.assert_called_once_with(500)
@@ -259,7 +259,7 @@ def test_it_responds_with_error_html_when_get_counts_exception_occurs():
         with patch("main.get_counts", side_effect=Exception("exception")):
             handler.do_GET()
 
-            error = "Error during getting of all counts: exception".encode(
+            error = "Exception during getting of all counts: exception".encode(
                 "utf-8")
 
             handler.send_response.assert_called_once_with(500)
