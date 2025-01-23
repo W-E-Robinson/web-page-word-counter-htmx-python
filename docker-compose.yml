@@ -1,0 +1,20 @@
+version: "3.2"
+
+services:
+  web-page-word-counter-htmx:
+    image: web-page-word-counter-htmx
+    container_name: web-page-word-counter-htmx
+    ports:
+      - 3000:8000
+
+  web-page-word-counter-python:
+    image: web-page-word-counter-python
+    container_name: web-page-word-counter-python
+    ports:
+      - 8080:8080
+
+  web-page-word-counter-mongodb:
+    image: mongo:latest
+    container_name: web-page-word-counter-mongodb
+    ports:
+      - 27017:27017
