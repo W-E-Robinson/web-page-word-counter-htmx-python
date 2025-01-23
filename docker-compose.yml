@@ -1,7 +1,12 @@
 version: "3.2"
-# NOTE: move this in monorepoing? = top level = for all
 
 services:
+  web-page-word-counter-htmx:
+    image: web-page-word-counter-htmx
+    container_name: web-page-word-counter-htmx
+    ports:
+      - 3000:8000
+
   web-page-word-counter-python:
     image: web-page-word-counter-python
     container_name: web-page-word-counter-python
