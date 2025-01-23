@@ -44,6 +44,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(http_code)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers",
+                         "HX-Request, HX-Current-URL, HX-Target")
         self.send_header(
             "Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
