@@ -289,7 +289,7 @@ def test_it_responds_with_error_when_URL_already_searched():
 
     assert response.status_code == 400
     assert response.content.decode(
-        "utf-8") == "Error during addition of new URL count: already searched for analysis of URL: http://sample-1-html-server:8080"
+        "utf-8") == "UrlError during addition of new URL count: already searched for analysis of URL: http://sample-1-html-server:8080"
 
 
 def test_it_responds_with_404_not_found():

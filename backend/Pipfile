@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 jinja2 = "*"
 pymongo = "*"
+python-dotenv = "*"
 
 [dev-packages]
 pytest = "*"
@@ -19,7 +20,6 @@ dev = "python3 src/main.py"
 format = "isort . && black . && flake8 ."
 test-unit = "pytest -v --maxfail=1 --disable-warnings tests/unit"
 test-integration = "pytest -v --maxfail=1 --disable-warnings tests/integration"
-
 
 [requires]
 python_version = "3.12"

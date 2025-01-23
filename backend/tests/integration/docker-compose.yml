@@ -4,6 +4,9 @@ services:
   web-page-word-counter-python:
     image: web-page-word-counter-python
     container_name: web-page-word-counter-python
+    environment:
+      - SERVER_PORT=8080
+      - MONGO_CLIENT_ENDPOINT=mongodb://web-page-word-counter-mongodb:27017/
     ports:
       - 8080:8080
 

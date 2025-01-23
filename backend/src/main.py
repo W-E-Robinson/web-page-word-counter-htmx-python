@@ -1,8 +1,8 @@
 import logging
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import unquote, urlparse
-
 from pymongo import MongoClient
+import os
 
 from db.mongo import (
     UrlError,
@@ -13,8 +13,7 @@ from db.mongo import (
 )
 from libs.templating import counts_html, reset_html
 
-logger = logging.getLogger(__name__)  # where is this used? = has relevance?
-logging.basicConfig(level=logging.DEBUG)  # NOTE: environment variable this
+logging.basicConfig(level=logging.DEBUG)
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
@@ -182,8 +181,9 @@ def run(mongo_client):
     """
     def handler_with_mongo_client(*args, **kwargs):
         return HTTPRequestHandler(*args, mongo_client=mongo_client, **kwargs)
-    # NOTE: environment variable this
-    httpd = HTTPServer(("0.0.0.0", 8080), handler_with_mongo_client)
+    server_port = os.getenv("SERVER_PORT", "8080")
+    httpd = HTTPServer(("0.0.0.0", int(server_port)),
+                       handler_with_mongo_client)
 
     logging.info("Starting httpd...\n")
     try:
@@ -203,7 +203,7 @@ def run(mongo_client):
 
 if __name__ == "__main__":
     logging.info("Initiating MongoDb client")
-    # NOTE: environment variable this
-    mongo_client = MongoClient(
-        "mongodb://localhost:27017/")  # NOTE: this needs enving for tests, compose vs dev
+    mongo_client_url = os.getenv(
+        "MONGO_CLIENT_ENDPOINT", "mongodb://localhost:27017/")
+    mongo_client = MongoClient(mongo_client_url)
     run(mongo_client)
