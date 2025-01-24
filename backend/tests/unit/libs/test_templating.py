@@ -3,15 +3,16 @@ from utils import normalise_whitespace
 
 
 def test_reset_html():
-    assert reset_html() == """<form id="form">
+    assert normalise_whitespace(reset_html()) == normalise_whitespace("""<form id="form">
     <input type="text" name="url" value="">
-    <button class="btn" hx-get="http://localhost:8080/reset" hx-trigger="click" hx-target="#form" hx-swap="outerHTML">
+    <button hx-get="http://localhost:8080/reset" hx-trigger="click" hx-target="#form" hx-swap="outerHTML">
         Reset
     </button>
-    <button class="btn" hx-get="http://localhost:8080/count" hx-trigger="click" hx-target="#counts" hx-swap="outerHTML">
+    <button hx-get="http://localhost:8080/count" hx-trigger="click" hx-target="#counts"
+        hx-swap="outerHTML" hx-include="[name='url']">
         Count
     </button>
-</form>"""
+</form>""")
 
 
 def test_counts_html():
@@ -57,99 +58,103 @@ def test_counts_html():
 
     assert normalise_whitespace(counts_html(word_counts)) == normalise_whitespace("""<div id="counts">
     <div>
-        <div>
-            <h1>https://www.sample1.com - 12</h1>
-            <button class="btn" hx-get="http://localhost:8080/count?url=https://www.sample1.com&display=false" hx-trigger="click"
+        <div class="url-header">
+            <h4>https://www.sample1.com - 12</h4>
+            <button class="counts-button" hx-get="http://localhost:8080/count?url=https://www.sample1.com&display=false" hx-trigger="click"
                 hx-target="#counts" hx-swap="outerHTML">
                 Close
             </button>
         </div>
-        <table>
-            <tr>
-                <th>Word</th>
-                <th>Count</th>
-            </tr>
-            <tr>
-                <td>sample</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>text</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>html</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="btn" disabled>
-                        Previous DISABLED
-                    </button>
-                </td>
-                <td>
-                    <button class="btn" disabled>
-                        Next DISABLED
-                    </button>
-                </td>
-            </tr>
-        </table>
+        <div class="count-table">
+            <table>
+                <tr>
+                    <th>Word</th>
+                    <th>Count</th>
+                </tr>
+                <tr>
+                    <td>sample</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>text</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>html</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="counts-button" disabled>
+                            Previous
+                        </button>
+                    </td>
+                    <td>
+                        <button class="counts-button" disabled>
+                            Next
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div>
-        <div>
-            <h1>https://www.sample2.com - 1</h1>
-            <button class="btn" hx-get="http://localhost:8080/count?url=https://www.sample2.com&display=true" hx-trigger="click"
+        <div class="url-header">
+            <h4>https://www.sample2.com - 1</h4>
+            <button class="counts-button" hx-get="http://localhost:8080/count?url=https://www.sample2.com&display=true" hx-trigger="click"
                 hx-target="#counts" hx-swap="outerHTML">
                 Open
             </button>
         </div>
     </div>
     <div>
-        <div>
-            <h1>https://www.sample3.com - 31</h1>
-            <button class="btn" hx-get="http://localhost:8080/count?url=https://www.sample3.com&display=false" hx-trigger="click"
+        <div class="url-header">
+            <h4>https://www.sample3.com - 31</h4>
+            <button class="counts-button" hx-get="http://localhost:8080/count?url=https://www.sample3.com&display=false" hx-trigger="click"
                 hx-target="#counts" hx-swap="outerHTML">
                 Close
             </button>
         </div>
-        <table>
-            <tr>
-                <th>Word</th>
-                <th>Count</th>
-            </tr>
-            <tr>
-                <td>banana</td>
-                <td>7</td>
-            </tr>
-            <tr>
-                <td>cherry</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>test</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>sample</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>text</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="btn" disabled>
-                        Previous DISABLED
-                    </button>
-                </td>
-                <td>
-                    <button class="btn" hx-get="http://localhost:8080/count?url=https://www.sample3.com&page=2"
-                        hx-trigger="click" hx-target="#counts" hx-swap="outerHTML">
-                        Next
-                    </button>
-                </td>
-            </tr>
-        </table>
+        <div class="count-table">
+            <table>
+                <tr>
+                    <th>Word</th>
+                    <th>Count</th>
+                </tr>
+                <tr>
+                    <td>banana</td>
+                    <td>7</td>
+                </tr>
+                <tr>
+                    <td>cherry</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>test</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>sample</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>text</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="counts-button" disabled>
+                            Previous
+                        </button>
+                    </td>
+                    <td>
+                        <button class="counts-button" hx-get="http://localhost:8080/count?url=https://www.sample3.com&page=2"
+                            hx-trigger="click" hx-target="#counts" hx-swap="outerHTML">
+                            Next
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>""")

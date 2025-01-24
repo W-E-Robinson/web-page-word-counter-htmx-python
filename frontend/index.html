@@ -16,11 +16,11 @@
 
     <form id="form">
         <input type="text" name="url" value="">
-        <button class="btn" hx-get="http://localhost:8080/reset" hx-trigger="click" hx-target="#form"
+        <button hx-get="http://localhost:8080/reset" hx-trigger="click" hx-target="#form"
             hx-swap="outerHTML">
             Reset
         </button>
-        <button class="btn" hx-get="http://localhost:8080/count" hx-trigger="click" hx-target="#counts"
+        <button hx-get="http://localhost:8080/count" hx-trigger="click" hx-target="#counts"
             hx-swap="outerHTML" hx-include="[name='url']">
             Count
         </button>
