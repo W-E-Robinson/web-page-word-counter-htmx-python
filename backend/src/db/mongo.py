@@ -23,18 +23,18 @@ class UrlError(Exception):
         super().__init__(self.message)
 
 
-def add_new_count(url, client):
-    """Function to add new URL count information into MongoDB.
+def has_url_been_searched(url, client, raise_if_found, raise_if_not_found):
+    """Function to check if a searched URL already exists in MonggoDB.
 
     Args:
-        URL (str): URL that count information is added for.
+        URL (str): URL that exisiting count information is checked for.
         client: MongoDB client.
+        raise_if_found (bool): Raise if URL information is found.
+        raise_if_not_found (bool): Raise if URL information is not found.
 
     Raises:
         UrlError: If error getting current searched URLs in MongoDB.
         UrlError: If URL has already been searched for.
-        UrlError: If error fetching HTML for searched URL.
-        UrlError: If error inserting count information into MongoDB.
 
     """
     counts_collection = client["local_database"]["counts_collection"]
@@ -47,10 +47,36 @@ def add_new_count(url, client):
 
     urls_list = [doc['url'] for doc in searched_urls]
 
-    if url in urls_list:
+    is_url_found = url in urls_list
+
+    if is_url_found and raise_if_found:
         raise UrlError(
             f"already searched for analysis of URL: {url}",
             400)
+
+    if not is_url_found and raise_if_not_found:
+        raise UrlError(
+            f"URL has not been analysed yet: {url}",
+            400)
+
+
+def add_new_count(url, client):
+    """Function to add new URL count information into MongoDB.
+
+    Args:
+        URL (str): URL that count information is added for.
+        client: MongoDB client.
+
+    Raises:
+        UrlError: If error getting current searched URLs in MongoDB (from has_url_been_searched).
+        UrlError: If URL has already been searched for (from has_url_been_searched).
+        UrlError: If error fetching HTML for searched URL.
+        UrlError: If error inserting count information into MongoDB.
+
+    """
+    has_url_been_searched(url, client, True, False)
+
+    counts_collection = client["local_database"]["counts_collection"]
 
     try:
         contents = urllib.request.urlopen(url).read()
@@ -84,10 +110,14 @@ def update_page(url, new_page, client):
         client: MongoDB client.
 
     Raises:
+        UrlError: If error getting current searched URLs in MongoDB (from has_url_been_searched).
+        UrlError: If URL has not been searched for yet (from has_url_been_searched).
         UrlError: If error finding word count information for URL.
         UrlError: If error updating page value for URL in MongoDB.
 
     """
+    has_url_been_searched(url, client, False, True)
+
     counts_collection = client["local_database"]["counts_collection"]
 
     try:
@@ -119,9 +149,13 @@ def update_display(url, display, client):
         client: MongoDB client.
 
     Raises:
+        UrlError: If error getting current searched URLs in MongoDB (from has_url_been_searched).
+        UrlError: If URL has not been searched for yet (from has_url_been_searched).
         UrlError: If error updating display value for URL in MongoDB.
 
     """
+    has_url_been_searched(url, client, False, True)
+
     counts_collection = client["local_database"]["counts_collection"]
 
     try:

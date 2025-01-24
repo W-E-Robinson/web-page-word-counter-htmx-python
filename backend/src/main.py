@@ -93,8 +93,6 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                 isDisplayRequest = display_index != -1
 
                 # Add words information for new URL, or update pagination or display.
-                # NOTE: consider HTTP methods of pagination and display.
-                # NOTE: for pagi + disp, check url already in word counts = another common mongo function called here before each further interaction? = or do as part and save a mondgo request?
                 if isPaginationRequest:
                     pagination_value = url[pagination_index +
                                            len("&page="): None]

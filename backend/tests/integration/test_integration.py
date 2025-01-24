@@ -292,6 +292,24 @@ def test_it_responds_with_error_when_URL_already_searched():
         "utf-8") == "UrlError during addition of new URL count: already searched for analysis of URL: http://sample-1-html-server:8080"
 
 
+def test_it_responds_with_error_when_URL_has_not_been_searched_for_paging():
+    response = requests.get(
+        f"http://localhost:8080/count?url={test_1_url}&page=2")
+
+    assert response.status_code == 400
+    assert response.content.decode(
+        "utf-8") == "UrlError during updating of page: URL has not been analysed yet: http://sample-1-html-server:8080"
+
+
+def test_it_responds_with_error_when_URL_has_not_been_searched_for_displaying():
+    response = requests.get(
+        f"http://localhost:8080/count?url={test_1_url}&display=false")
+
+    assert response.status_code == 400
+    assert response.content.decode(
+        "utf-8") == "UrlError during updating of display: URL has not been analysed yet: http://sample-1-html-server:8080"
+
+
 def test_it_responds_with_404_not_found():
     response = requests.get("http://localhost:8080/not-found")
 
