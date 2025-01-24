@@ -13,5 +13,5 @@ pipenv run test-integration -vv
 
 (
   cd tests/integration
-  docker-compose down
+  docker-compose down -v
 )

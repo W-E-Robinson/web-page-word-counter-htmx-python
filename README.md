@@ -1,15 +1,17 @@
-# web-page-word-counter-frontend-htmx
+# Web-page-word-counter-htmx-python
 
-## Development
+## Introduction
+This repo was a job application task to create an application that analyses a URL for both a count of the words on the page and a breakdown of word frequency.
+The original task required using React and Node, this repo is a recreation trying out HTMX with Python.
+The repo is in two parts, the `/frontend` and `/backend`, they both contain READMEs with further information.
+For instructions to run together as part of a Docker compose see below.
 
-### Serve files through local server (below or equivalent)
-```sh
-python3 -m http.server 8000
+## Running
+### Docker compose (frontend container exposed on: http://localhost:3000)
+```bash
+chmod +x ./build-docker-images.sh
+./build-docker-images.sh && docker compose -p web-page-word-counter-htmx-python up -d
 ```
-open -a "Safari" index.html
-OR
-open index.html
-go through installing and running, runing tests and package and dev packages too
-
-docker compose up -d
-docker compose down -v
+```bash
+docker compose -p web-page-word-counter-htmx-python down -v
+```
