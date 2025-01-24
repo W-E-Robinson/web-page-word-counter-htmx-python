@@ -6,6 +6,7 @@ body {
 }
 
 h1,
+h3,
 h4,
 form {
     display: flex;
@@ -21,4 +22,20 @@ button {
 input {
     width: 18rem;
     height: 2rem;
+}
+
+div.url-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counts-button {
+    height: 2rem;
+}
+
+div.count-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,56 +1,58 @@
-<div>
-    <h1>{{ url }} - {{ word_count }}</h1>
+<div class="url-header">
+    <h4>{{ url }} - {{ word_count }}</h4>
     {% if display %}
-    <button class="btn" hx-get="http://localhost:8080/count?url={{ url }}&display=false" hx-trigger="click"
+    <button class="counts-button" hx-get="http://localhost:8080/count?url={{ url }}&display=false" hx-trigger="click"
         hx-target="#counts" hx-swap="outerHTML">
         Close
     </button>
     {% else %}
-    <button class="btn" hx-get="http://localhost:8080/count?url={{ url }}&display=true" hx-trigger="click"
+    <button class="counts-button" hx-get="http://localhost:8080/count?url={{ url }}&display=true" hx-trigger="click"
         hx-target="#counts" hx-swap="outerHTML">
         Open
     </button>
     {% endif %}
 </div>
 {% if display %}
-<table>
-    <tr>
-        {% for column in columns %}
-        <th>{{ column }}</th>
+<div class="count-table">
+    <table>
+        <tr>
+            {% for column in columns %}
+            <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in rows %}
+        <tr>
+            {% for data in row %}
+            <td>{{ data }}</td>
+            {% endfor %}
+        </tr>
         {% endfor %}
-    </tr>
-    {% for row in rows %}
-    <tr>
-        {% for data in row %}
-        <td>{{ data }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-    <tr>
-        <td>
-            {% if prev_page is not none %}
-            <button class="btn" hx-get="http://localhost:8080/count?url={{ url }}&page={{ prev_page }}"
-                hx-trigger="click" hx-target="#counts" hx-swap="outerHTML">
-                Previous
-            </button>
-            {% else %}
-            <button class="btn" disabled>
-                Previous DISABLED
-            </button>
-            {% endif %}
-        </td>
-        <td>
-            {% if next_page is not none %}
-            <button class="btn" hx-get="http://localhost:8080/count?url={{ url }}&page={{ next_page }}"
-                hx-trigger="click" hx-target="#counts" hx-swap="outerHTML">
-                Next
-            </button>
-            {% else %}
-            <button class="btn" disabled>
-                Next DISABLED
-            </button>
-            {% endif %}
-        </td>
-    </tr>
-</table>
+        <tr>
+            <td>
+                {% if prev_page is not none %}
+                <button class="counts-button" hx-get="http://localhost:8080/count?url={{ url }}&page={{ prev_page }}" hx-trigger="click"
+                    hx-target="#counts" hx-swap="outerHTML">
+                    Previous
+                </button>
+                {% else %}
+                <button class="counts-button" disabled>
+                    Previous
+                </button>
+                {% endif %}
+            </td>
+            <td>
+                {% if next_page is not none %}
+                <button class="counts-button" hx-get="http://localhost:8080/count?url={{ url }}&page={{ next_page }}" hx-trigger="click"
+                    hx-target="#counts" hx-swap="outerHTML">
+                    Next
+                </button>
+                {% else %}
+                <button class="counts-button" disabled>
+                    Next
+                </button>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
 {% endif %}

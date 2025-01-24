@@ -10,3 +10,6 @@ open -a "Safari" index.html
 OR
 open index.html
 go through installing and running, runing tests and package and dev packages too
+
+docker compose up -d
+docker compose down -v
