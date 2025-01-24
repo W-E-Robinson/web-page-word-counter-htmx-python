@@ -1,8 +1,8 @@
 import logging
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import unquote, urlparse
-
 from pymongo import MongoClient
+import os
 
 from db.mongo import (
     UrlError,
@@ -13,8 +13,7 @@ from db.mongo import (
 )
 from libs.templating import counts_html, reset_html
 
-logger = logging.getLogger(__name__)  # where is this used? = has relevance?
-logging.basicConfig(level=logging.DEBUG)  # NOTE: environment variable this
+logging.basicConfig(level=logging.DEBUG)
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
@@ -44,6 +43,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(http_code)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers",
+                         "HX-Request, HX-Current-URL, HX-Target")
         self.send_header(
             "Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
@@ -75,7 +76,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     self.complete_response(200, content)
                     return
                 except Exception as e:
-                    error = f"Error during rendering of reset_form_template: {
+                    error = f"Exception during rendering of reset_form_template: {
                         e}"
                     logging.error(error)
                     self.complete_response(500, error.encode("utf-8"))
@@ -92,22 +93,21 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                 isDisplayRequest = display_index != -1
 
                 # Add words information for new URL, or update pagination or display.
-                # NOTE: consider HTTP methods of pagination and display.
-                # NOTE: for pagi + disp, check url already in word counts = another common mongo function called here before each further interaction? = or do as part and save a mondgo request?
                 if isPaginationRequest:
-                    pagination_value = url[pagination_index + len("&page="): None]
+                    pagination_value = url[pagination_index +
+                                           len("&page="): None]
                     url = url[None: pagination_index]
                     try:
                         update_page(url, int(pagination_value),
                                     self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during updating of page: {
+                        error = f"UrlError during updating of page: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during updating of page: {
+                        error = f"Exception during updating of page: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -119,13 +119,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                         update_display(url, False if display_value ==
                                        "false" else True, self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during updating of display: {
+                        error = f"UrlError during updating of display: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during updating of display: {
+                        error = f"Exception during updating of display: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -134,13 +134,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     try:
                         add_new_count(url, self.mongo_client)
                     except UrlError as e:
-                        error = f"Error during addition of new URL count: {
+                        error = f"UrlError during addition of new URL count: {
                             e.message}"
                         logging.error(error)
                         self.complete_response(e.code, error.encode("utf-8"))
                         return
                     except Exception as e:
-                        error = f"Error during addition of new URL count: {
+                        error = f"Exception during addition of new URL count: {
                             e}"
                         logging.error(error)
                         self.complete_response(500, error.encode("utf-8"))
@@ -153,13 +153,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     self.complete_response(200, content)
                     return
                 except UrlError as e:
-                    error = f"Error during getting of all counts: {
+                    error = f"UrlError during getting of all counts: {
                         e.message}"
                     logging.error(error)
                     self.complete_response(e.code, error.encode("utf-8"))
                     return
                 except Exception as e:
-                    error = f"Error during getting of all counts: {
+                    error = f"Exception during getting of all counts: {
                         e}"
                     logging.error(error)
                     self.complete_response(500, error.encode("utf-8"))
@@ -179,8 +179,9 @@ def run(mongo_client):
     """
     def handler_with_mongo_client(*args, **kwargs):
         return HTTPRequestHandler(*args, mongo_client=mongo_client, **kwargs)
-    # NOTE: environment variable this
-    httpd = HTTPServer(("0.0.0.0", 8080), handler_with_mongo_client)
+    server_port = os.getenv("SERVER_PORT", "8080")
+    httpd = HTTPServer(("0.0.0.0", int(server_port)),
+                       handler_with_mongo_client)
 
     logging.info("Starting httpd...\n")
     try:
@@ -200,7 +201,7 @@ def run(mongo_client):
 
 if __name__ == "__main__":
     logging.info("Initiating MongoDb client")
-    # NOTE: environment variable this
-    mongo_client = MongoClient(
-        "mongodb://web-page-word-counter-mongodb:27017/")
+    mongo_client_url = os.getenv(
+        "MONGO_CLIENT_ENDPOINT", "mongodb://localhost:27017/")
+    mongo_client = MongoClient(mongo_client_url)
     run(mongo_client)

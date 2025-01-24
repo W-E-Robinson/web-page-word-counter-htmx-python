@@ -1,6 +1,7 @@
 #!/bin/bash
 
 docker build --pull --no-cache -t web-page-word-counter-python .
+docker pull mongo:latest
 
 (
   cd tests/integration

@@ -9,7 +9,51 @@ from db.mongo import (
     get_counts,
     update_page,
     update_display,
+    has_url_been_searched,
 )
+
+
+def test_it_raises_has_url_been_searched_when_raise_if_found():
+    from unittest.mock import MagicMock
+    mock_client = MagicMock()
+    mock_counts_collection = MagicMock()
+    mock_client.__getitem__.return_value = {
+        "counts_collection": mock_counts_collection
+    }
+    mock_counts_collection.find.return_value = [
+        {"url": "https://example.com"}]
+
+    url = "https://example.com"
+
+    with pytest.raises(UrlError) as exc:
+        has_url_been_searched(url, mock_client, True, False)
+
+    assert str(
+        exc.value.message) == "already searched for analysis of URL: https://example.com"
+    assert exc.value.code == 400
+
+    assert isinstance(exc.value, UrlError)
+
+
+def test_it_raises_has_url_been_searched_when_raise_if_not_found():
+    from unittest.mock import MagicMock
+    mock_client = MagicMock()
+    mock_counts_collection = MagicMock()
+    mock_client.__getitem__.return_value = {
+        "counts_collection": mock_counts_collection
+    }
+    mock_counts_collection.find.return_value = []
+
+    url = "https://example.com"
+
+    with pytest.raises(UrlError) as exc:
+        has_url_been_searched(url, mock_client, False, True)
+
+    assert str(
+        exc.value.message) == "URL has not been analysed yet: https://example.com"
+    assert exc.value.code == 400
+
+    assert isinstance(exc.value, UrlError)
 
 
 def test_it_raises_when_an_error_arises_getting_searched_urls():
@@ -33,7 +77,6 @@ def test_it_raises_when_an_error_arises_getting_searched_urls():
     assert isinstance(exc.value, UrlError)
 
 
-# NOTE: extract this logic into its own mongodb function, then can use with pagi and display to check url IS in mongodb
 def test_it_raises_when_a_url_has_already_been_counted():
     from unittest.mock import MagicMock
     mock_client = MagicMock()
@@ -149,6 +192,27 @@ def test_it_adds_new_count():
             })
 
 
+def test_it_raises_when_url_has_not_been_searched_for_pagination():
+    from unittest.mock import MagicMock
+    mock_client = MagicMock()
+    mock_counts_collection = MagicMock()
+    mock_client.__getitem__.return_value = {
+        "counts_collection": mock_counts_collection
+    }
+    mock_counts_collection.find.return_value = []
+
+    url = "https://example.com"
+
+    with pytest.raises(UrlError) as exc:
+        update_page(url, mock_client, mock_client)
+
+    assert str(
+        exc.value.message) == "URL has not been analysed yet: https://example.com"
+    assert exc.value.code == 400
+
+    assert isinstance(exc.value, UrlError)
+
+
 def test_it_raises_when_error_getting_words_list_for_doc_to_update():
     from unittest.mock import MagicMock
     mock_client = MagicMock()
@@ -156,6 +220,7 @@ def test_it_raises_when_error_getting_words_list_for_doc_to_update():
     mock_client.__getitem__.return_value = {
         "counts_collection": mock_counts_collection
     }
+    mock_counts_collection.find.return_value = [{"url": "https://example.com"}]
     mock_counts_collection.find_one.side_effect = Exception("mongo error")
 
     url = "https://example.com"
@@ -178,6 +243,7 @@ def test_it_raises_when_error_updating_a_page():
     mock_client.__getitem__.return_value = {
         "counts_collection": mock_counts_collection
     }
+    mock_counts_collection.find.return_value = [{"url": "https://example.com"}]
     mock_counts_collection.find_one.return_value = {"words_list": [
         ["one", 5],
         ["two", 10],
@@ -208,6 +274,7 @@ def test_it_updates_a_page():
     mock_client.__getitem__.return_value = {
         "counts_collection": mock_counts_collection
     }
+    mock_counts_collection.find.return_value = [{"url": "https://example.com"}]
     mock_counts_collection.find_one.return_value = {
         "words_list": [
             ["one", 5],
@@ -232,6 +299,26 @@ def test_it_updates_a_page():
     )
 
 
+def test_it_raises_when_url_has_not_been_searched_for_display():
+    from unittest.mock import MagicMock
+    mock_client = MagicMock()
+    mock_counts_collection = MagicMock()
+    mock_client.__getitem__.return_value = {
+        "counts_collection": mock_counts_collection
+    }
+    mock_counts_collection.find.return_value = []
+
+    url = "https://example.com"
+
+    with pytest.raises(UrlError) as exc:
+        update_page(url, mock_client, mock_client)
+
+    assert str(
+        exc.value.message) == "URL has not been analysed yet: https://example.com"
+    assert exc.value.code == 400
+
+    assert isinstance(exc.value, UrlError)
+
 def test_it_raises_when_error_updating_display():
     from unittest.mock import MagicMock
     mock_client = MagicMock()
@@ -239,6 +326,7 @@ def test_it_raises_when_error_updating_display():
     mock_client.__getitem__.return_value = {
         "counts_collection": mock_counts_collection
     }
+    mock_counts_collection.find.return_value = [{"url": "https://example.com"}]
     mock_counts_collection.update_one.side_effect = Exception("mongo error")
 
     url = "https://example.com"
@@ -261,6 +349,7 @@ def test_it_updates_a_display():
     mock_client.__getitem__.return_value = {
         "counts_collection": mock_counts_collection
     }
+    mock_counts_collection.find.return_value = [{"url": "https://example.com"}]
     mock_counts_collection.update_one.return_value = None
 
     url = "https://example.com"
